@@ -136,3 +136,14 @@ canvas{display:block;width:100%!important;height:auto!important}
     height: 360px;
   }
 }
+/* Remove or override this if present:
+canvas{display:block;width:100%!important;height:auto!important}
+*/
+
+/* Make the canvas fill the chart box */
+#timeDonut {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;  /* <-- critical */
+}
+
