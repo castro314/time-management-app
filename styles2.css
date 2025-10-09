@@ -1,0 +1,138 @@
+/* SBVC-ish light palette (site can override these) */
+.tmc-app{
+  --tmc-primary-700:#1e3a8a;
+  --tmc-primary-100:#e6eefb;
+  --tmc-text:#1f2937;
+  --tmc-muted:#5b6472;
+  --tmc-card:#ffffff;
+  --tmc-border:#e5e7eb;
+  --tmc-surface:#f8fafc;
+  --tmc-danger:#b91c1c;
+  --tmc-danger-bg:#fee2e2;
+
+  background:#fff; color:var(--tmc-text);
+  max-width:980px; margin:0 auto; padding:24px;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* Header */
+.tmc-header{margin-bottom:16px;}
+.tmc-header h1{margin:0 0 8px;font-size:clamp(22px,2.4vw,28px);font-weight:800;color:var(--tmc-primary-700)}
+.tmc-muted{color:var(--tmc-muted);margin:0}
+.tmc-muted-small{color:var(--tmc-muted);font-size:13px;margin:8px 0 0}
+
+/* Card & chart */
+.tmc-card{background:var(--tmc-card);border:1px solid var(--tmc-border);border-radius:12px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,.04)}
+.tmc-chartBox{position:relative;min-height:340px;margin-bottom:20px;background:var(--tmc-primary-100);border:1px solid var(--tmc-border);border-radius:12px;padding:8px}
+canvas{display:block;width:100%!important;height:auto!important}
+
+/* KPI chips */
+.tmc-kpis{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.tmc-kpi{background:var(--tmc-surface);border:1px solid var(--tmc-border);border-radius:10px;padding:10px 14px}
+.tmc-kpi h3{margin:0;font-size:13px;color:var(--tmc-muted);font-weight:600}
+.tmc-kpi p{margin:4px 0 0;font-size:18px;font-weight:800;color:var(--tmc-primary-700)}
+.tmc-kpi--danger{border-color:var(--tmc-danger);background:var(--tmc-danger-bg)}
+.tmc-kpi--danger p{color:var(--tmc-danger)}
+
+/* Controls */
+.tmc-controls{border:1px solid var(--tmc-border);border-radius:10px;background:var(--tmc-card);padding:12px;margin-bottom:16px}
+.tmc-rowctrl{display:grid;grid-template-columns:1fr 140px;gap:12px;align-items:center;margin:8px 0}
+.tmc-rowctrl label{font-weight:600}
+.tmc-rowctrl input[type="number"]{width:100%;padding:8px 10px;border:1px solid var(--tmc-border);border-radius:8px;font-size:14px}
+.tmc-rowctrl input[type="number"]:focus{outline:2px solid var(--tmc-primary-100);border-color:var(--tmc-primary-700)}
+
+/* Warning */
+.tmc-warning{margin-top:10px;padding:10px;border-radius:8px;background:var(--tmc-danger-bg);color:var(--tmc-danger);border:1px solid var(--tmc-danger)}
+
+/* Table */
+.tmc-legendTitle{font-weight:800;color:var(--tmc-primary-700);margin:12px 0 8px}
+.tmc-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--tmc-card);border:1px solid var(--tmc-border);border-radius:8px;overflow:hidden}
+.tmc-table thead th{background:var(--tmc-primary-100);color:var(--tmc-primary-700);font-weight:700}
+.tmc-table th,.tmc-table td{padding:10px 12px;border-bottom:1px solid var(--tmc-border);text-align:left}
+.tmc-table tr:last-child td{border-bottom:none}
+
+/* Screen reader utility */
+.tmc-sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+
+/* Make element width calculations include padding/border */
+.tmc-app, .tmc-app * { box-sizing: border-box; }
+
+/* Controls container */
+.tmc-controls{
+  border:1px solid var(--tmc-border);
+  border-radius:10px;
+  background:var(--tmc-card);
+  padding:12px;
+  margin-bottom:16px;
+}
+
+/* Two-column row: label on left, input on right */
+.tmc-rowctrl{
+  display:grid;
+  /* Right column is clamped so it can't overflow */
+  grid-template-columns: 1fr clamp(120px, 30%, 220px);
+  gap:12px;
+  align-items:center;
+  margin:8px 0;
+}
+
+/* Labels wrap nicely if long */
+.tmc-rowctrl label{ font-weight:600; overflow-wrap:anywhere; }
+
+/* Inputs fill the right column without spilling */
+.tmc-rowctrl input[type="number"]{
+  width:100%;
+  max-width:100%;
+  padding:8px 10px;
+  border:1px solid var(--tmc-border);
+  border-radius:8px;
+  font-size:14px;
+  background:#fff;
+}
+.tmc-rowctrl input[type="number"]:focus{
+  outline:2px solid var(--tmc-primary-100);
+  border-color:var(--tmc-primary-700);
+}
+
+/* Stack rows on narrow screens */
+@media (max-width: 640px){
+  .tmc-rowctrl{ grid-template-columns: 1fr; }
+}
+
+/* Ideal chart size for balanced layout */
+.tmc-chartBox {
+  position: relative;
+  width: 100%;
+  max-width: 700px;   /* smaller than original 600+px look, larger than the 340px test */
+  height: 700px;
+  margin: 0 auto 1rem auto;
+}
+
+/* Keep mascot proportional */
+#tmc-mascot {
+  width: 85%;
+  height: auto;
+  opacity: 0.95;
+}
+
+/* Slightly tighten legend and spacing */
+.tmc-card {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.tmc-kpis {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tmc-kpi p {
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .tmc-chartBox {
+    max-width: 360px;
+    height: 360px;
+  }
+}
