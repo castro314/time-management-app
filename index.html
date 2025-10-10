@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Time Management – Donut (Phase 3)</title>
+  <title>Time Management App</title>
+  <link rel="preload" as="image" href="mascot.png">
+
 
   <link rel="stylesheet" href="styles2.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -19,7 +21,15 @@
     <section class="tmc-card">
       <!-- Mascot asset for the donut center -->
       <div class="tmc-chartBox">
-        <img id="tmc-mascot" src="mascot.png" alt="" hidden />
+        <img
+          id="tmc-mascot"
+          src="mascot.png"
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+          decoding="sync"
+          style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;"
+        />
         <canvas id="timeDonut"
           role="img"
           aria-label="Weekly time allocation donut with study, in-class, work, commute, sleep, meals, hygiene, exercise, family, and remaining hours.">
@@ -82,3 +92,4 @@
   </div>
 </body>
 </html>
+
