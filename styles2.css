@@ -220,31 +220,44 @@
   /* Stack label/input on very narrow screens */
   .tmc-rowctrl { grid-template-columns: 1fr; }
 }
-/* ===== Mobile spacing fixes (keeps desktop as-is) ===== */
+/* =========================================================
+   ===== Mobile Spacing & Responsive Chart Adjustments =====
+   Keeps desktop layout unchanged while reducing vertical
+   whitespace above/below the donut on mobile devices.
+   ========================================================= */
+
+/* Standard mobile screens (tablets & phones under 768px) */
 @media (max-width: 768px) {
-  /* Slightly smaller chart and tighter margin under it */
+
+  /* Chart box: smaller footprint & tighter outer spacing */
   .tmc-chartBox {
+    /* Uses custom property fallback if theme overrides sizes */
     max-width: var(--tmc-chart-size-sm, 340px);
     height: var(--tmc-chart-size-sm, 340px);
-    margin: 4px auto 8px auto; /* was 0 auto 1rem auto */
-    padding: 6px;              /* was 8px */
+    margin: 4px auto 8px auto; /* previously 0 auto 1rem auto */
+    padding: 6px;              /* previously 8px */
   }
 
-  /* Lighten the card padding so the chart doesn't look "floated" */
+  /* Card wrapper: reduce top/bottom padding to remove excess space */
   .tmc-card {
     padding-top: 12px;   /* was 20px */
     padding-bottom: 12px;
   }
 
-  /* Pull KPIs closer to the chart */
+  /* KPI summary chips: bring closer to chart */
   .tmc-kpis {
-    margin-top: 6px;     /* was 8+ */
+    margin-top: 6px;     /* was ~8px */
     margin-bottom: 10px; /* was 16px */
     gap: 12px;
   }
+
+  /* Readjust heading margins for better flow */
+  .tmc-header {
+    margin-bottom: 10px;
+  }
 }
 
-/* Ultra-small phones (optional, feels great on 360px wide devices) */
+/* Extra-small mobile phones (~360px wide and below) */
 @media (max-width: 380px) {
   .tmc-chartBox {
     max-width: 300px;
@@ -252,5 +265,13 @@
     margin: 2px auto 6px auto;
     padding: 4px;
   }
+
+  /* Further tighten KPI area for ultra-compact devices */
+  .tmc-kpis {
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
 }
+
+
 
