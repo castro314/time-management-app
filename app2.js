@@ -133,33 +133,7 @@ const chart = new Chart(ctx, {
   },
   plugins: [mascotCenterPlugin]
 });
-/* ---------- Orientation/viewport-specific tuning (portrait-only boost) ---------- */
-function tuneChartForViewport() {
-  if (!chart?.options) return;
 
-  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-  const isNarrow   = window.matchMedia("(max-width: 768px)").matches;
-
-  if (isPortrait || isNarrow) {
-    // MOBILE / PORTRAIT: fill the square more
-    chart.options.layout = { padding: 0 };
-    chart.options.radius = "112%";   // try 110–115% (NOT 150%)
-    chart.options.cutout = "58%";    // smaller hole = thicker ring
-    chart.options.plugins.legend.fullSize = false;
-    chart.options.plugins.legend.padding = 0;
-    chart.options.plugins.legend.labels.padding = 4;
-  } else {
-    // DESKTOP / LANDSCAPE: normal, balanced spacing
-    chart.options.layout = { padding: 0 };
-    chart.options.radius = "100%";
-    chart.options.cutout = "62%";
-    chart.options.plugins.legend.fullSize = true;
-    chart.options.plugins.legend.padding = 10;
-    chart.options.plugins.legend.labels.padding = 10;
-  }
-
-  chart.update("none");
-}
 
 // Apply on load + on changes
 const mqPortrait = window.matchMedia("(orientation: portrait)");
@@ -266,6 +240,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
