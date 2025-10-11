@@ -2,8 +2,9 @@
 // See LICENSE.txt for license text.
 
 const WEEK_HOURS = 168;
+const STUDY_MULTIPLIER = 3; // units × 3 hours out-of-class
 
-/* ---------- Mascot center plugin (draw BEFORE datasets so tooltips stay on top) ---------- */
+/* ---------- Mascot center plugin ---------- */
 const mascotCenterPlugin = {
   id: "tmcCenterImage",
   beforeDatasetsDraw(chart, args, options) {
@@ -26,7 +27,7 @@ const mascotCenterPlugin = {
   }
 };
 
-/* ---------- Initial categories/values (match the inputs’ default values) ---------- */
+/* ---------- Categories (study will be computed) ---------- */
 const catDefs = [
   { key: "study",    label: "Study (out-of-class)",         color: "#4ADE80" },
   { key: "inclass",  label: "In-class / Direct Instruction",color: "#60A5FA" },
@@ -39,21 +40,43 @@ const catDefs = [
   { key: "family",   label: "Family / caregiving",          color: "#F472B6" }
 ];
 
-/* ---------- Helpers ---------- */
 const $ = (sel) => document.querySelector(sel);
-const getInt = (id) => {
-  const v = parseInt($(id).value, 10);
-  return Number.isFinite(v) && v >= 0 ? Math.min(v, WEEK_HOURS) : 0;
+const clamp = (n, lo, hi) => Math.min(Math.max(n, lo), hi);
+
+/* ---------- Parse helpers ---------- */
+const getIntField = (id, min=0, max=168) => {
+  const el = $(id);
+  const n = parseInt(el.value, 10);
+  const v = Number.isFinite(n) ? clamp(n, min, max) : 0;
+  // normalize UI if user typed decimals etc.
+  el.value = v;
+  return v;
 };
 
-/* ---------- Build initial arrays from DOM ---------- */
+/* ---------- Study auto-calc from units ---------- */
+function computeStudyFromUnits() {
+  const units = getIntField("#hours-units", 0, 24);
+  const study = clamp(units * STUDY_MULTIPLIER, 0, WEEK_HOURS);
+  const studyEl = $("#hours-study");
+  studyEl.value = study;
+  return { units, study };
+}
+
+/* ---------- Read all inputs (with study overwritten) ---------- */
 function readAll() {
-  const vals = {};
-  catDefs.forEach(c => { vals[c.key] = getInt(`#hours-${c.key}`); });
+  // Update study based on units first
+  const { study } = computeStudyFromUnits();
+
+  const vals = { study };
+  // Read the rest (excluding study)
+  catDefs.forEach(c => {
+    if (c.key === "study") return;
+    vals[c.key] = getIntField(`#hours-${c.key}`);
+  });
   return vals;
 }
 
-/* ---------- KPI rendering ---------- */
+/* ---------- KPI & warnings ---------- */
 function renderKpi(overage, remaining) {
   const kpi = $("#remainingKpi");
   const text = $("#remainingText");
@@ -65,8 +88,6 @@ function renderKpi(overage, remaining) {
     text.textContent = `${remaining} hrs`;
   }
 }
-
-/* ---------- Warning banner ---------- */
 function renderWarning(overage) {
   const warn = $("#tmc-warning");
   if (overage > 0) {
@@ -78,7 +99,7 @@ function renderWarning(overage) {
   }
 }
 
-/* ---------- Chart setup ---------- */
+/* ---------- Chart ---------- */
 const ctx = document.getElementById("timeDonut");
 const chart = new Chart(ctx, {
   type: "doughnut",
@@ -89,6 +110,8 @@ const chart = new Chart(ctx, {
     plugins: {
       legend: {
         position: "bottom",
+        onClick: () => {},                    // disable legend toggling
+        onHover: (e) => { e.native.target.style.cursor = "default"; },
         labels: {
           color: getComputedStyle(document.querySelector('.tmc-app'))
                   .getPropertyValue('--tmc-text') || '#1f2937'
@@ -111,25 +134,13 @@ const chart = new Chart(ctx, {
   plugins: [mascotCenterPlugin]
 });
 
-/* ---------- Recompute + redraw (called on every input) ---------- */
+/* ---------- Recompute + redraw ---------- */
 function recomputeAndDraw() {
-  // Clamp any out-of-range input immediately (0–168, integers only)
-  catDefs.forEach(c => {
-    const el = document.getElementById(`hours-${c.key}`);
-    if (!el) return;
-    // force integer input & clamp
-    const n = parseInt(el.value, 10);
-    if (!Number.isFinite(n) || n < 0) el.value = 0;
-    else if (n > WEEK_HOURS) el.value = WEEK_HOURS;
-    else el.value = n; // remove decimals if any
-  });
-
   const vals = readAll();
   const used = Object.values(vals).reduce((s, v) => s + v, 0);
   const remaining = Math.max(0, WEEK_HOURS - used);
   const overage   = Math.max(0, used - WEEK_HOURS);
 
-  // Build chart dataset from non-zero categories
   const labels = [];
   const data = [];
   const bg = [];
@@ -137,7 +148,6 @@ function recomputeAndDraw() {
     const v = vals[c.key];
     if (v > 0) { labels.push(c.label); data.push(v); bg.push(c.color); }
   });
-  // Remaining slice only when not over
   if (overage === 0 && remaining > 0) {
     labels.push("Remaining");
     data.push(remaining);
@@ -154,9 +164,14 @@ function recomputeAndDraw() {
 }
 
 /* ---------- Wire inputs ---------- */
-catDefs.forEach(c => {
-  const el = document.getElementById(`hours-${c.key}`);
+["units","inclass","work","commute","sleep","meals","hygiene","exercise","family"].forEach(key => {
+  const el = document.getElementById(`hours-${key}`);
   if (el) el.addEventListener("input", recomputeAndDraw);
+});
+
+// Prevent mouse-wheel from changing number fields while scrolling
+document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
+  input.addEventListener('wheel', e => { if (document.activeElement === input) e.preventDefault(); }, { passive:false });
 });
 
 /* ---------- First render ---------- */
