@@ -263,7 +263,7 @@
     max-width: 300px;
     height: 300px;
     margin: 2px auto 6px auto;
-    padding: 4px;
+    padding: 2px;
   }
 
   /* Further tighten KPI area for ultra-compact devices */
@@ -272,6 +272,7 @@
     margin-bottom: 8px;
   }
 }
+
 
 
 
