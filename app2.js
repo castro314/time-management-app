@@ -188,19 +188,5 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
   }, { passive:false });
 });
 
-
 /* ---------- First render ---------- */
 recomputeAndDraw();
-
-
-
-
-
-
-
-
-
-
-
-
-
