@@ -1,149 +1,222 @@
-/* SBVC-ish light palette (site can override these) */
-.tmc-app{
-  --tmc-primary-700:#1e3a8a;
-  --tmc-primary-100:#e6eefb;
-  --tmc-text:#1f2937;
-  --tmc-muted:#5b6472;
-  --tmc-card:#ffffff;
+/* ========================================================================
+   Time Management Calculator (tmc) — styles2.css
+   ------------------------------------------------------------------------
+   Integration notes for site developer:
+   - All styles are scoped under `.tmc-app` to avoid collisions.
+   - Brand/theme can be updated by overriding the CSS variables in `.tmc-app`.
+   - Chart size is controlled via `--tmc-chart-size` and `--tmc-chart-size-sm`.
+   ======================================================================== */
+
+
+/* ========== 0) GLOBAL/RESET (scoped) ==================================== */
+.tmc-app,
+.tmc-app * {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+
+/* ========== 1) THEME TOKENS (override as needed) ======================== */
+.tmc-app {
+  /* Brand colors (SBVC-ish defaults; safe to override) */
+  --tmc-primary-700: #1e3a8a;   /* headings, emphasis */
+  --tmc-primary-100: #e6eefb;   /* light surface tint */
+
+  /* Neutral palette */
+  --tmc-text:  #1f2937;
+  --tmc-muted: #5b6472;
+  --tmc-card:  #ffffff;
   --tmc-border:#e5e7eb;
   --tmc-surface:#f8fafc;
-  --tmc-danger:#b91c1c;
-  --tmc-danger-bg:#fee2e2;
 
-  background:#fff; color:var(--tmc-text);
-  max-width:980px; margin:0 auto; padding:24px;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  /* Status (danger) */
+  --tmc-danger:    #b91c1c;
+  --tmc-danger-bg: #fee2e2;
+
+  /* Layout bounds */
+  --tmc-max-width: 980px;  /* app content width */
+  --tmc-card-width: 920px; /* inner card max width */
+
+  /* Chart sizing (desktop / small screens) */
+  --tmc-chart-size:    700px;
+  --tmc-chart-size-sm: 700px;
+
+  /* Base background/text */
+  background: #fff;
+  color: var(--tmc-text);
+
+  /* Page paddings and bounds */
+  max-width: var(--tmc-max-width);
+  margin: 0 auto;
+  padding: 24px;
 }
 
-/* Header */
-.tmc-header{margin-bottom:16px;}
-.tmc-header h1{margin:0 0 8px;font-size:clamp(22px,2.4vw,28px);font-weight:800;color:var(--tmc-primary-700)}
-.tmc-muted{color:var(--tmc-muted);margin:0}
-.tmc-muted-small{color:var(--tmc-muted);font-size:13px;margin:8px 0 0}
 
-/* Card & chart */
-.tmc-card{background:var(--tmc-card);border:1px solid var(--tmc-border);border-radius:12px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,.04)}
-.tmc-chartBox{position:relative;min-height:340px;margin-bottom:20px;background:var(--tmc-primary-100);border:1px solid var(--tmc-border);border-radius:12px;padding:8px}
-canvas{display:block;width:100%!important;height:auto!important}
-
-/* KPI chips */
-.tmc-kpis{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.tmc-kpi{background:var(--tmc-surface);border:1px solid var(--tmc-border);border-radius:10px;padding:10px 14px}
-.tmc-kpi h3{margin:0;font-size:13px;color:var(--tmc-muted);font-weight:600}
-.tmc-kpi p{margin:4px 0 0;font-size:18px;font-weight:800;color:var(--tmc-primary-700)}
-.tmc-kpi--danger{border-color:var(--tmc-danger);background:var(--tmc-danger-bg)}
-.tmc-kpi--danger p{color:var(--tmc-danger)}
-
-/* Controls */
-.tmc-controls{border:1px solid var(--tmc-border);border-radius:10px;background:var(--tmc-card);padding:12px;margin-bottom:16px}
-.tmc-rowctrl{display:grid;grid-template-columns:1fr 140px;gap:12px;align-items:center;margin:8px 0}
-.tmc-rowctrl label{font-weight:600}
-.tmc-rowctrl input[type="number"]{width:100%;padding:8px 10px;border:1px solid var(--tmc-border);border-radius:8px;font-size:14px}
-.tmc-rowctrl input[type="number"]:focus{outline:2px solid var(--tmc-primary-100);border-color:var(--tmc-primary-700)}
-
-/* Warning */
-.tmc-warning{margin-top:10px;padding:10px;border-radius:8px;background:var(--tmc-danger-bg);color:var(--tmc-danger);border:1px solid var(--tmc-danger)}
-
-/* Table */
-.tmc-legendTitle{font-weight:800;color:var(--tmc-primary-700);margin:12px 0 8px}
-.tmc-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--tmc-card);border:1px solid var(--tmc-border);border-radius:8px;overflow:hidden}
-.tmc-table thead th{background:var(--tmc-primary-100);color:var(--tmc-primary-700);font-weight:700}
-.tmc-table th,.tmc-table td{padding:10px 12px;border-bottom:1px solid var(--tmc-border);text-align:left}
-.tmc-table tr:last-child td{border-bottom:none}
-
-/* Screen reader utility */
-.tmc-sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
-
-/* Make element width calculations include padding/border */
-.tmc-app, .tmc-app * { box-sizing: border-box; }
-
-/* Controls container */
-.tmc-controls{
-  border:1px solid var(--tmc-border);
-  border-radius:10px;
-  background:var(--tmc-card);
-  padding:12px;
-  margin-bottom:16px;
+/* ========== 2) TYPOGRAPHY ============================================== */
+.tmc-header { margin-bottom: 16px; }
+.tmc-header h1 {
+  margin: 0 0 8px;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 800;
+  color: var(--tmc-primary-700);
 }
+.tmc-muted { color: var(--tmc-muted); margin: 0; }
+.tmc-muted-small { color: var(--tmc-muted); font-size: 13px; margin: 8px 0 0; }
 
-/* Two-column row: label on left, input on right */
-.tmc-rowctrl{
-  display:grid;
-  /* Right column is clamped so it can't overflow */
-  grid-template-columns: 1fr clamp(120px, 30%, 220px);
-  gap:12px;
-  align-items:center;
-  margin:8px 0;
-}
 
-/* Labels wrap nicely if long */
-.tmc-rowctrl label{ font-weight:600; overflow-wrap:anywhere; }
-
-/* Inputs fill the right column without spilling */
-.tmc-rowctrl input[type="number"]{
-  width:100%;
-  max-width:100%;
-  padding:8px 10px;
-  border:1px solid var(--tmc-border);
-  border-radius:8px;
-  font-size:14px;
-  background:#fff;
-}
-.tmc-rowctrl input[type="number"]:focus{
-  outline:2px solid var(--tmc-primary-100);
-  border-color:var(--tmc-primary-700);
-}
-
-/* Stack rows on narrow screens */
-@media (max-width: 640px){
-  .tmc-rowctrl{ grid-template-columns: 1fr; }
-}
-
-/* Ideal chart size for balanced layout */
-.tmc-chartBox {
-  position: relative;
-  width: 100%;
-  max-width: 700px;   /* smaller than original 600+px look, larger than the 340px test */
-  height: 700px;
-  margin: 0 auto 1rem auto;
-}
-
-/* Keep mascot proportional */
-#tmc-mascot {
-  width: 85%;
-  height: auto;
-  opacity: 0.95;
-}
-
-/* Slightly tighten legend and spacing */
+/* ========== 3) CARD/LAYOUT CONTAINERS ================================== */
 .tmc-card {
-  max-width: 920px;
+  background: var(--tmc-card);
+  border: 1px solid var(--tmc-border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,.04);
+
+  /* keeps content from getting too wide on large viewports */
+  max-width: var(--tmc-card-width);
   margin: 0 auto;
 }
 
-.tmc-kpis {
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+
+/* ========== 4) CHART AREA ============================================== */
+/* Outer wrapper that defines the donut’s footprint */
+.tmc-chartBox {
+  position: relative;
+  width: 100%;
+  max-width: var(--tmc-chart-size);
+  height: var(--tmc-chart-size);
+  margin: 0 auto 1rem auto;
+
+  background: var(--tmc-primary-100);
+  border: 1px solid var(--tmc-border);
+  border-radius: 12px;
+  padding: 8px; /* inner breathing room for the canvas */
 }
 
-.tmc-kpi p {
-  font-weight: 700;
-}
-
-@media (max-width: 768px) {
-  .tmc-chartBox {
-    max-width: 360px;
-    height: 360px;
-  }
-}
-/* Remove or override this if present:
-canvas{display:block;width:100%!important;height:auto!important}
-*/
-
-/* Make the canvas fill the chart box */
+/* Make the canvas fill the chart box exactly */
 #timeDonut {
   display: block;
   width: 100% !important;
-  height: 100% !important;  /* <-- critical */
+  height: 100% !important; /* critical for sizing via the box */
 }
 
+/* Keep the (hidden) mascot loader predictable if surfaced later */
+#tmc-mascot {
+  width: 85%;
+  height: auto;
+  opacity: 0.95; /* visual balance if displayed */
+}
+
+
+/* ========== 5) KPIs (Totals/Remaining) ================================= */
+.tmc-kpis {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 8px 0 16px 0;
+}
+.tmc-kpi {
+  background: var(--tmc-surface);
+  border: 1px solid var(--tmc-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.tmc-kpi h3 {
+  margin: 0;
+  font-size: 13px;
+  color: var(--tmc-muted);
+  font-weight: 600;
+}
+.tmc-kpi p {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--tmc-primary-700);
+}
+/* Danger state when total > 168 */
+.tmc-kpi--danger {
+  border-color: var(--tmc-danger);
+  background: var(--tmc-danger-bg);
+}
+.tmc-kpi--danger p { color: var(--tmc-danger); }
+
+
+/* ========== 6) CONTROLS (Inputs) ======================================= */
+/* Controls block wrapper */
+.tmc-controls {
+  border: 1px solid var(--tmc-border);
+  border-radius: 10px;
+  background: var(--tmc-card);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+/* Each row: label left, number input right (auto-clamped width) */
+.tmc-rowctrl {
+  display: grid;
+  grid-template-columns: 1fr clamp(120px, 30%, 220px); /* prevents overflow */
+  gap: 12px;
+  align-items: center;
+  margin: 8px 0;
+}
+.tmc-rowctrl label {
+  font-weight: 600;
+  overflow-wrap: anywhere; /* long labels wrap gracefully */
+}
+.tmc-rowctrl input[type="number"] {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--tmc-border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+.tmc-rowctrl input[type="number"]:focus {
+  outline: 2px solid var(--tmc-primary-100);
+  border-color: var(--tmc-primary-700);
+}
+
+/* Read-only look for computed fields (e.g., Study = units × 3) */
+.tmc-readonly[readonly] {
+  background: #f3f4f6;  /* light gray */
+  color: #6b7280;       /* muted text */
+  cursor: not-allowed;
+}
+
+
+/* ========== 7) STATUS/WARNINGS ========================================= */
+.tmc-warning {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--tmc-danger-bg);
+  color: var(--tmc-danger);
+  border: 1px solid var(--tmc-danger);
+}
+
+
+/* ========== 8) ACCESSIBILITY UTILITIES ================================= */
+.tmc-sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px,1px,1px,1px);
+  white-space: nowrap;
+  border: 0; padding: 0; margin: -1px;
+}
+
+
+/* ========== 9) RESPONSIVE RULES ======================================== */
+@media (max-width: 768px) {
+  /* Smaller chart on phones/small tablets */
+  .tmc-chartBox {
+    max-width: var(--tmc-chart-size-sm);
+    height: var(--tmc-chart-size-sm);
+  }
+}
+
+@media (max-width: 640px) {
+  /* Stack label/input on very narrow screens */
+  .tmc-rowctrl { grid-template-columns: 1fr; }
+}
