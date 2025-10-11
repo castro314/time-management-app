@@ -107,14 +107,26 @@ const chart = new Chart(ctx, {
   options: {
     responsive: true,
     maintainAspectRatio: false,
+
+    // Remove internal whitespace around the arcs
+    layout: { padding: { top: 0, right: 0, bottom: 0, left: 0 } },
+
+    // Let the arcs fill closer to the canvas edges
+    radius: "99%",     // grow outer radius (reduces top/bottom gap)
+    cutout: "62%",     // keep/lower if you want a bigger hole
+
     plugins: {
       legend: {
         position: "bottom",
-        onClick: () => {},                    // disable legend toggling
+        onClick: () => {}, // legend clicks disabled (your preference)
         onHover: (e) => { e.native.target.style.cursor = "default"; },
         labels: {
           color: getComputedStyle(document.querySelector('.tmc-app'))
-                  .getPropertyValue('--tmc-text') || '#1f2937'
+                   .getPropertyValue('--tmc-text') || '#1f2937',
+          padding: 6,    // smaller legend footprint
+          boxWidth: 12,
+          boxHeight: 12,
+          font: { size: 12 }
         }
       },
       tooltip: {
@@ -126,13 +138,13 @@ const chart = new Chart(ctx, {
           }
         }
       },
-      tmcCenterImage: { imageId: "tmc-mascot", scale: 0.85 }
-    },
-    layout: { padding: 10 },
-    cutout: "60%"
+      // Slightly smaller center image so it never feels cramped after radius grows
+      tmcCenterImage: { imageId: "tmc-mascot", scale: 0.80 }
+    }
   },
   plugins: [mascotCenterPlugin]
 });
+
 
 /* ---------- Recompute + redraw ---------- */
 function recomputeAndDraw() {
@@ -193,3 +205,4 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
