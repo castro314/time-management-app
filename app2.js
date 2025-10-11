@@ -107,34 +107,16 @@ const chart = new Chart(ctx, {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-
-    // Remove extra space inside the canvas
-    layout: { padding: { top: 0, right: 0, bottom: 0, left: 0 } },
-
-    // Let arcs expand closer to the canvas edges (shrinks top/bottom gap)
-    radius: "100%",   // fill the square
-    cutout: "62%",    // tweak 58–65% if you want more/less “hole”
-
     plugins: {
       legend: {
         position: "bottom",
-
-        // ↓ Critical: shrink the legend’s own box so it sits tighter to the chart
-        padding: 0,                    // space around the legend box
+        onClick: () => {},                    // disable legend toggling
+        onHover: (e) => { e.native.target.style.cursor = "default"; },
         labels: {
-          padding: 6,                  // space between items (was ~12)
-          boxWidth: 12,
-          boxHeight: 12,
-          font: { size: 12 },
           color: getComputedStyle(document.querySelector('.tmc-app'))
-                   .getPropertyValue('--tmc-text') || '#1f2937'
-        },
-
-        // keep the legend non-interactive (no accidental hides)
-        onClick: () => {},
-        onHover: (e) => { e.native.target.style.cursor = "default"; }
+                  .getPropertyValue('--tmc-text') || '#1f2937'
+        }
       },
-
       tooltip: {
         callbacks: {
           label: (ctx) => {
@@ -144,15 +126,13 @@ const chart = new Chart(ctx, {
           }
         }
       },
-
-      // Slightly smaller mascot so it never crowds after radius grows
-      tmcCenterImage: { imageId: "tmc-mascot", scale: 0.80 }
-    }
+      tmcCenterImage: { imageId: "tmc-mascot", scale: 0.85 }
+    },
+    layout: { padding: 10 },
+    cutout: "60%"
   },
   plugins: [mascotCenterPlugin]
 });
-
-
 
 /* ---------- Recompute + redraw ---------- */
 function recomputeAndDraw() {
@@ -183,35 +163,16 @@ function recomputeAndDraw() {
   renderWarning(overage);
 }
 
-/* ---------- Wire inputs (mobile-friendly) ---------- */
-function bindRecompute(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const handler = () => recomputeAndDraw();
-  ["input", "change", "blur"].forEach(evt => el.addEventListener(evt, handler));
-}
-
-// Units needs to force Study recompute immediately as you type/tap
-(function bindUnits() {
-  const el = document.getElementById("hours-units");
-  if (!el) return;
-  const handler = () => recomputeAndDraw(); // computeStudyFromUnits() is called inside readAll()
-  ["input", "change", "blur"].forEach(evt => el.addEventListener(evt, handler));
-})();
-
-// Bind the rest of the fields
-["inclass","work","commute","sleep","meals","hygiene","exercise","family"]
-  .forEach(key => bindRecompute(`hours-${key}`));
-
-// Prevent mouse-wheel from changing number fields while scrolling (desktop)
-document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
-  input.addEventListener('wheel', e => {
-    if (document.activeElement === input) e.preventDefault();
-  }, { passive:false });
+/* ---------- Wire inputs ---------- */
+["units","inclass","work","commute","sleep","meals","hygiene","exercise","family"].forEach(key => {
+  const el = document.getElementById(`hours-${key}`);
+  if (el) el.addEventListener("input", recomputeAndDraw);
 });
 
+// Prevent mouse-wheel from changing number fields while scrolling
+document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
+  input.addEventListener('wheel', e => { if (document.activeElement === input) e.preventDefault(); }, { passive:false });
+});
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
-
-
