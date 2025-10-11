@@ -134,19 +134,23 @@ const chart = new Chart(ctx, {
   plugins: [mascotCenterPlugin]
 });
 /* ----------  (Addition) Orientation-specific spacing tuning ---------- */
-function applyPortraitTuning(isPortrait) {
-  if (!chart?.options?.plugins?.legend) return;
+/* ---------- Orientation/viewport-specific tuning (portrait-only boost) ---------- */
+function tuneChartForViewport() {
+  if (!chart?.options) return;
 
-  if (isPortrait) {
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const isNarrow   = window.matchMedia("(max-width: 768px)").matches;
+
+  if (isPortrait || isNarrow) {
+    // MOBILE / PORTRAIT: fill the square more
     chart.options.layout = { padding: 0 };
-    chart.options.radius = "150%"; // Fixes mobile spacing issue on vertical orientation
-    chart.options.cutout = "62%";
+    chart.options.radius = "112%";   // try 110–115% (NOT 150%)
+    chart.options.cutout = "58%";    // smaller hole = thicker ring
     chart.options.plugins.legend.fullSize = false;
     chart.options.plugins.legend.padding = 0;
     chart.options.plugins.legend.labels.padding = 4;
-    chart.options.plugins.legend.labels.boxWidth = 12;
-    chart.options.plugins.legend.labels.boxHeight = 12;
   } else {
+    // DESKTOP / LANDSCAPE: normal, balanced spacing
     chart.options.layout = { padding: 0 };
     chart.options.radius = "100%";
     chart.options.cutout = "62%";
@@ -157,6 +161,24 @@ function applyPortraitTuning(isPortrait) {
 
   chart.update("none");
 }
+
+// Apply on load + on changes
+const mqPortrait = window.matchMedia("(orientation: portrait)");
+const mqNarrow   = window.matchMedia("(max-width: 768px)");
+
+tuneChartForViewport();
+mqPortrait.addEventListener?.("change", () => tuneChartForViewport());
+mqNarrow.addEventListener?.("change", () => tuneChartForViewport());
+
+let __tmcT;
+window.addEventListener("resize", () => {
+  clearTimeout(__tmcT);
+  __tmcT = setTimeout(() => {
+    tuneChartForViewport();
+    chart.resize();
+  }, 120);
+});
+
 
 // Detect and apply tuning
 const mqPortrait = window.matchMedia("(orientation: portrait)");
@@ -228,6 +250,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
