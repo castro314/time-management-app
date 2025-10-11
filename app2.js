@@ -139,7 +139,7 @@ function applyPortraitTuning(isPortrait) {
 
   if (isPortrait) {
     chart.options.layout = { padding: 0 };
-    chart.options.radius = "100%";
+    chart.options.radius = "150%";
     chart.options.cutout = "62%";
     chart.options.plugins.legend.fullSize = false;
     chart.options.plugins.legend.padding = 0;
@@ -228,6 +228,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
