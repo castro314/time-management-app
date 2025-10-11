@@ -144,7 +144,7 @@ function tuneChartForViewport() {
   if (isPortrait || isNarrow) {
     // MOBILE / PORTRAIT: fill the square more
     chart.options.layout = { padding: 0 };
-    chart.options.radius = "112%";   // try 110–115% (NOT 150%)
+    chart.options.radius = "50%";   // try 110–115% (NOT 150%)
     chart.options.cutout = "58%";    // smaller hole = thicker ring
     chart.options.plugins.legend.fullSize = false;
     chart.options.plugins.legend.padding = 0;
@@ -250,6 +250,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
