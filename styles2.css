@@ -220,3 +220,37 @@
   /* Stack label/input on very narrow screens */
   .tmc-rowctrl { grid-template-columns: 1fr; }
 }
+/* ===== Mobile spacing fixes (keeps desktop as-is) ===== */
+@media (max-width: 768px) {
+  /* Slightly smaller chart and tighter margin under it */
+  .tmc-chartBox {
+    max-width: var(--tmc-chart-size-sm, 340px);
+    height: var(--tmc-chart-size-sm, 340px);
+    margin: 4px auto 8px auto; /* was 0 auto 1rem auto */
+    padding: 6px;              /* was 8px */
+  }
+
+  /* Lighten the card padding so the chart doesn't look "floated" */
+  .tmc-card {
+    padding-top: 12px;   /* was 20px */
+    padding-bottom: 12px;
+  }
+
+  /* Pull KPIs closer to the chart */
+  .tmc-kpis {
+    margin-top: 6px;     /* was 8+ */
+    margin-bottom: 10px; /* was 16px */
+    gap: 12px;
+  }
+}
+
+/* Ultra-small phones (optional, feels great on 360px wide devices) */
+@media (max-width: 380px) {
+  .tmc-chartBox {
+    max-width: 300px;
+    height: 300px;
+    margin: 2px auto 6px auto;
+    padding: 4px;
+  }
+}
+
