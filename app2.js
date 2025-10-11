@@ -133,7 +133,43 @@ const chart = new Chart(ctx, {
   },
   plugins: [mascotCenterPlugin]
 });
+/* ----------  (Addition) Orientation-specific spacing tuning ---------- */
+function applyPortraitTuning(isPortrait) {
+  if (!chart?.options?.plugins?.legend) return;
 
+  if (isPortrait) {
+    chart.options.layout = { padding: 0 };
+    chart.options.radius = "100%";
+    chart.options.cutout = "62%";
+    chart.options.plugins.legend.fullSize = false;
+    chart.options.plugins.legend.padding = 0;
+    chart.options.plugins.legend.labels.padding = 4;
+    chart.options.plugins.legend.labels.boxWidth = 12;
+    chart.options.plugins.legend.labels.boxHeight = 12;
+  } else {
+    chart.options.layout = { padding: 0 };
+    chart.options.radius = "100%";
+    chart.options.cutout = "62%";
+    chart.options.plugins.legend.fullSize = true;
+    chart.options.plugins.legend.padding = 10;
+    chart.options.plugins.legend.labels.padding = 10;
+  }
+
+  chart.update("none");
+}
+
+// Detect and apply tuning
+const mqPortrait = window.matchMedia("(orientation: portrait)");
+applyPortraitTuning(mqPortrait.matches);
+mqPortrait.addEventListener?.("change", (e) => applyPortraitTuning(e.matches));
+
+// Debounce resize fixes for mobile Safari bar animations
+window.addEventListener("resize", () => {
+  if (mqPortrait.matches) {
+    clearTimeout(window.__tmcResizeT);
+    window.__tmcResizeT = setTimeout(() => chart.resize(), 120);
+  }
+});
 /* ---------- Recompute + redraw ---------- */
 function recomputeAndDraw() {
   const vals = readAll();
@@ -192,6 +228,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
