@@ -7,7 +7,7 @@
   <link rel="preload" as="image" href="mascot.png">
 
 
-  <link rel="stylesheet" href="styles2.css" />
+  <link rel="stylesheet" href="styles3.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script defer src="app2.js"></script>
 </head>
@@ -45,15 +45,19 @@
         </div>
       </div>
 
-      <!-- Phase 3: Simple integer inputs -->
+      <!--  Input Containers -->
       <div class="tmc-controls" aria-describedby="tmc-note">
-        <div class="tmc-rowctrl">
-          <label for="hours-study">Study (out-of-class)</label>
-          <input id="hours-study" type="number" inputmode="numeric" min="0" max="168" step="1" value="24">
+         <div class="tmc-rowctrl">
+            <label for="hours-units">Units (credits)</label>
+            <input id="hours-units" type="number" inputmode="numeric" min="0" max="24" step="1" value="12">
+        </div>
+          <div class="tmc-rowctrl">
+            <label for="hours-study">Study (out-of-class)</label>
+            <input id="hours-study" type="number" inputmode="numeric" min="0" max="168" step="1" value="36" readonly aria-readonly="true" class="tmc-readonly">
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-inclass">In-class / Direct Instruction</label>
-          <input id="hours-inclass" type="number" inputmode="numeric" min="0" max="168" step="1" value="11">
+          <input id="hours-inclass" type="number" inputmode="numeric" min="0" max="168" step="1" value="0">
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-work">Work (job)</label>
@@ -84,7 +88,6 @@
           <input id="hours-family" type="number" inputmode="numeric" min="0" max="168" step="1" value="0">
         </div>
 
-        <p id="tmc-note" class="tmc-muted-small">Tip: Totals over 168 hrs will be highlighted. Remaining will be set to 0 when you’re over.</p>
         <div id="tmc-warning" class="tmc-warning" role="status" aria-live="polite" hidden></div>
       </div>
 
@@ -92,4 +95,3 @@
   </div>
 </body>
 </html>
-
