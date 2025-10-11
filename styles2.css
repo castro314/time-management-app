@@ -215,36 +215,5 @@
     height: var(--tmc-chart-size-sm);
   }
 }
-/* ========== 10) Mobile Formatting ======================================== */
-@media (max-width: 640px) {
-  /* Stack label/input on very narrow screens */
-  .tmc-rowctrl { grid-template-columns: 1fr; }
-}
 
-/* Portrait-only: tighten the blue box + legend spacing */
-@media (orientation: portrait) {
-  /* Make chart box hug the canvas */
-  .tmc-chartBox {
-    /* square box sized from width; no mysterious height */
-    aspect-ratio: 1 / 1;
-    margin: 2px auto 6px auto;
-    padding: 2px; /* reduce inner gap */
-  }
-
-  /* If you want the donut a bit smaller in portrait, uncomment below:
-  .tmc-chartBox { max-width: var(--tmc-chart-size-sm, 340px); }
-  */
-
-  /* Pull KPI block closer, too */
-  .tmc-kpis { margin-top: 6px; margin-bottom: 10px; gap: 12px; }
-}
-
-/* Use modern small viewport height on mobile Safari to avoid extra “air” from the URL bar */
-@supports (height: 1svh) {
-  @media (orientation: portrait) {
-    .tmc-card { padding-top: 12px; padding-bottom: 12px; }
-    /* Optional: cap the chart box by height so it doesn’t leave big gutters */
-    .tmc-chartBox { max-height: min(70svh, var(--tmc-chart-size)); }
-  }
-}
 
