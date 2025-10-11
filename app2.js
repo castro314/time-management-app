@@ -108,27 +108,33 @@ const chart = new Chart(ctx, {
     responsive: true,
     maintainAspectRatio: false,
 
-    // Remove internal whitespace around the arcs
+    // Remove extra space inside the canvas
     layout: { padding: { top: 0, right: 0, bottom: 0, left: 0 } },
 
-    // Let the arcs fill closer to the canvas edges
-    radius: "99%",     // grow outer radius (reduces top/bottom gap)
-    cutout: "62%",     // keep/lower if you want a bigger hole
+    // Let arcs expand closer to the canvas edges (shrinks top/bottom gap)
+    radius: "100%",   // fill the square
+    cutout: "62%",    // tweak 58–65% if you want more/less “hole”
 
     plugins: {
       legend: {
         position: "bottom",
-        onClick: () => {}, // legend clicks disabled (your preference)
-        onHover: (e) => { e.native.target.style.cursor = "default"; },
+
+        // ↓ Critical: shrink the legend’s own box so it sits tighter to the chart
+        padding: 0,                    // space around the legend box
         labels: {
-          color: getComputedStyle(document.querySelector('.tmc-app'))
-                   .getPropertyValue('--tmc-text') || '#1f2937',
-          padding: 6,    // smaller legend footprint
+          padding: 6,                  // space between items (was ~12)
           boxWidth: 12,
           boxHeight: 12,
-          font: { size: 12 }
-        }
+          font: { size: 12 },
+          color: getComputedStyle(document.querySelector('.tmc-app'))
+                   .getPropertyValue('--tmc-text') || '#1f2937'
+        },
+
+        // keep the legend non-interactive (no accidental hides)
+        onClick: () => {},
+        onHover: (e) => { e.native.target.style.cursor = "default"; }
       },
+
       tooltip: {
         callbacks: {
           label: (ctx) => {
@@ -138,12 +144,14 @@ const chart = new Chart(ctx, {
           }
         }
       },
-      // Slightly smaller center image so it never feels cramped after radius grows
+
+      // Slightly smaller mascot so it never crowds after radius grows
       tmcCenterImage: { imageId: "tmc-mascot", scale: 0.80 }
     }
   },
   plugins: [mascotCenterPlugin]
 });
+
 
 
 /* ---------- Recompute + redraw ---------- */
@@ -205,4 +213,5 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
