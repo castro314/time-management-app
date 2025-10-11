@@ -134,55 +134,6 @@ const chart = new Chart(ctx, {
   plugins: [mascotCenterPlugin]
 });
 
-
-// Apply on load + on changes
-const mqPortrait = window.matchMedia("(orientation: portrait)");
-const mqNarrow   = window.matchMedia("(max-width: 768px)");
-
-tuneChartForViewport();
-mqPortrait.addEventListener?.("change", () => tuneChartForViewport());
-mqNarrow.addEventListener?.("change", () => tuneChartForViewport());
-
-let __tmcT;
-window.addEventListener("resize", () => {
-  clearTimeout(__tmcT);
-  __tmcT = setTimeout(() => {
-    tuneChartForViewport();
-    chart.resize();
-  }, 120);
-});
-
-
-// Apply on load + on changes
-const mqPortrait = window.matchMedia("(orientation: portrait)");
-const mqNarrow   = window.matchMedia("(max-width: 768px)");
-
-tuneChartForViewport();
-mqPortrait.addEventListener?.("change", () => tuneChartForViewport());
-mqNarrow.addEventListener?.("change", () => tuneChartForViewport());
-
-let __tmcT;
-window.addEventListener("resize", () => {
-  clearTimeout(__tmcT);
-  __tmcT = setTimeout(() => {
-    tuneChartForViewport();
-    chart.resize();
-  }, 120);
-});
-
-
-// Detect and apply tuning
-const mqPortrait = window.matchMedia("(orientation: portrait)");
-applyPortraitTuning(mqPortrait.matches);
-mqPortrait.addEventListener?.("change", (e) => applyPortraitTuning(e.matches));
-
-// Debounce resize fixes for mobile Safari bar animations
-window.addEventListener("resize", () => {
-  if (mqPortrait.matches) {
-    clearTimeout(window.__tmcResizeT);
-    window.__tmcResizeT = setTimeout(() => chart.resize(), 120);
-  }
-});
 /* ---------- Recompute + redraw ---------- */
 function recomputeAndDraw() {
   const vals = readAll();
@@ -240,6 +191,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
