@@ -222,7 +222,6 @@ function recomputeAndDraw() {
 }
 
 /* ---------- Wire inputs (stable layout) ---------- */
-/* ---------- Wire inputs (stable layout) ---------- */
 function bindInputOnly(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -250,6 +249,7 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
 
