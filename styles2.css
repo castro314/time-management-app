@@ -220,3 +220,16 @@
   /* Stack label/input on very narrow screens */
   .tmc-rowctrl { grid-template-columns: 1fr; }
 }
+
+/* ========== 10) SPACING CORRECTION MOBILE DEVICES ======================== */
+
+@media (max-width: 768px) {
+  .tmc-chartBox {
+    max-width: 100%;
+    aspect-ratio: 1 / 1;   /* keeps it a square */
+    height: auto;          /* let width control height */
+    padding: 6px;          /* a bit tighter on mobile */
+  }
+}
+
+
