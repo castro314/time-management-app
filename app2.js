@@ -163,29 +163,15 @@ function recomputeAndDraw() {
   renderWarning(overage);
 }
 
-/* ---------- Wire inputs (stable layout) ---------- */
-function bindInputOnly(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.addEventListener("input", recomputeAndDraw, { passive: true });
-}
+/* ---------- Wire inputs ---------- */
+["units","inclass","work","commute","sleep","meals","hygiene","exercise","family"].forEach(key => {
+  const el = document.getElementById(`hours-${key}`);
+  if (el) el.addEventListener("input", recomputeAndDraw);
+});
 
-// Units: input (live) + change (iOS fallback). No blur.
-const unitsEl = document.getElementById("hours-units");
-if (unitsEl) {
-  unitsEl.addEventListener("input", recomputeAndDraw, { passive: true });
-  unitsEl.addEventListener("change", recomputeAndDraw, { passive: true });
-}
-
-// Bind the rest with input only
-["inclass","work","commute","sleep","meals","hygiene","exercise","family"]
-  .forEach(key => bindInputOnly(`hours-${key}`));
-
-// Prevent mouse-wheel from changing number fields while scrolling (desktop)
+// Prevent mouse-wheel from changing number fields while scrolling
 document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
-  input.addEventListener('wheel', e => {
-    if (document.activeElement === input) e.preventDefault();
-  }, { passive:false });
+  input.addEventListener('wheel', e => { if (document.activeElement === input) e.preventDefault(); }, { passive:false });
 });
 
 /* ---------- First render ---------- */
