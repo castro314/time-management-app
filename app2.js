@@ -163,16 +163,33 @@ function recomputeAndDraw() {
   renderWarning(overage);
 }
 
-/* ---------- Wire inputs ---------- */
-["units","inclass","work","commute","sleep","meals","hygiene","exercise","family"].forEach(key => {
-  const el = document.getElementById(`hours-${key}`);
-  if (el) el.addEventListener("input", recomputeAndDraw);
+/* ---------- Wire inputs (mobile-friendly) ---------- */
+function bindRecompute(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const handler = () => recomputeAndDraw();
+  ["input", "change", "blur"].forEach(evt => el.addEventListener(evt, handler));
+}
+
+// Units needs to force Study recompute immediately as you type/tap
+(function bindUnits() {
+  const el = document.getElementById("hours-units");
+  if (!el) return;
+  const handler = () => recomputeAndDraw(); // computeStudyFromUnits() is called inside readAll()
+  ["input", "change", "blur"].forEach(evt => el.addEventListener(evt, handler));
+})();
+
+// Bind the rest of the fields
+["inclass","work","commute","sleep","meals","hygiene","exercise","family"]
+  .forEach(key => bindRecompute(`hours-${key}`));
+
+// Prevent mouse-wheel from changing number fields while scrolling (desktop)
+document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
+  input.addEventListener('wheel', e => {
+    if (document.activeElement === input) e.preventDefault();
+  }, { passive:false });
 });
 
-// Prevent mouse-wheel from changing number fields while scrolling
-document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
-  input.addEventListener('wheel', e => { if (document.activeElement === input) e.preventDefault(); }, { passive:false });
-});
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
