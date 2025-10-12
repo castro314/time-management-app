@@ -133,6 +133,33 @@ const chart = new Chart(ctx, {
   },
   plugins: [mascotCenterPlugin]
 });
+/* --- after `const chart = new Chart(...);` --- */
+const mascotEl = document.getElementById('tmc-mascot');
+
+function refreshWhenMascotReady() {
+  if (!mascotEl) { try { chart.update(); } catch(_) {} return; }
+
+  const draw = () => { try { chart.update(); } catch(_) {} };
+
+  if (mascotEl.complete && mascotEl.naturalWidth > 0) {
+    draw();
+  } else {
+    mascotEl.addEventListener('load', draw, { once: true });
+  }
+
+  try {
+    if (typeof mascotEl.decode === 'function') {
+      mascotEl.decode().then(draw).catch(() => {});
+    }
+  } catch(_) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  recomputeAndDraw();       // first data render
+  refreshWhenMascotReady(); // ensure mascot paints
+});
+// (Optional) keep or drop this; it's a safe extra nudge on slow devices
+window.addEventListener('load', refreshWhenMascotReady);
 
 
 /* ---------- Recompute + redraw ---------- */
@@ -177,5 +204,6 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
 
 
