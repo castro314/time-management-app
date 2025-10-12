@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Time Management App</title>
-  <link rel="preload" as="image" href="mascot.png">
+  <link rel="preload" as="image" href="mascot.png" />
 
-
+  <!-- use styles4.css; we'll update this next -->
   <link rel="stylesheet" href="styles2.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script defer src="app2.js"></script>
@@ -15,25 +15,32 @@
   <div class="tmc-app">
     <header class="tmc-header">
       <h1>Time Management Calculator</h1>
-      <p class="tmc-muted">Fill in the approximate number of hours you spend each week on the activities listed below. As you enter your hours, the chart will update to show how much time remains in your 168-hour week.</p>
+      <p class="tmc-muted">
+        Fill in the approximate number of hours you spend each week on the activities listed below.
+        As you enter your hours, the chart will update to show how much time remains in your
+        168-hour week.
+      </p>
     </header>
 
     <section class="tmc-card">
-      <!-- Mascot asset for the donut center -->
+      <!-- Chart area -->
       <div class="tmc-chartBox">
-        <img
-          id="tmc-mascot"
-          src="mascot.png"
-          alt=""
-          loading="eager"
-          fetchpriority="high"
-          decoding="sync"
-          style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;"
-        />
-        <canvas id="timeDonut"
-          role="img"
-          aria-label="Weekly time allocation donut with study, in-class, work, commute, sleep, meals, hygiene, exercise, family, and remaining hours.">
-        </canvas>
+        <div class="tmc-canvasWrap">
+          <img
+            id="tmc-mascot"
+            src="mascot.png"
+            alt=""
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;"
+          />
+          <canvas
+            id="timeDonut"
+            role="img"
+            aria-label="Weekly time allocation donut with study, in-class, work, commute, sleep, meals, hygiene, exercise, family, and remaining hours.">
+          </canvas>
+        </div>
       </div>
 
       <div class="tmc-kpis">
@@ -45,54 +52,52 @@
         </div>
       </div>
 
-      <!--  Input Containers -->
+      <!-- Inputs -->
       <div class="tmc-controls" aria-describedby="tmc-note">
-         <div class="tmc-rowctrl">
-            <label for="hours-units">Units (credits)</label>
-            <input id="hours-units" type="number" inputmode="numeric" min="0" max="24" step="1" value="12">
+        <div class="tmc-rowctrl">
+          <label for="hours-units">Units (credits)</label>
+          <input id="hours-units" type="number" inputmode="numeric" min="0" max="24" step="1" value="12" />
         </div>
-          <div class="tmc-rowctrl">
-            <label for="hours-study">Study (out-of-class)</label>
-            <input id="hours-study" type="number" inputmode="numeric" min="0" max="168" step="1" value="36" readonly aria-readonly="true" class="tmc-readonly">
+        <div class="tmc-rowctrl">
+          <label for="hours-study">Study (out-of-class)</label>
+          <input id="hours-study" type="number" inputmode="numeric" min="0" max="168" step="1" value="36" readonly aria-readonly="true" class="tmc-readonly" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-inclass">In-class / Direct Instruction</label>
-          <input id="hours-inclass" type="number" inputmode="numeric" min="0" max="168" step="1" value="0">
+          <input id="hours-inclass" type="number" inputmode="numeric" min="0" max="168" step="1" value="0" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-work">Work (job)</label>
-          <input id="hours-work" type="number" inputmode="numeric" min="0" max="168" step="1" value="0">
+          <input id="hours-work" type="number" inputmode="numeric" min="0" max="168" step="1" value="0" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-commute">Commute</label>
-          <input id="hours-commute" type="number" inputmode="numeric" min="0" max="168" step="1" value="5">
+          <input id="hours-commute" type="number" inputmode="numeric" min="0" max="168" step="1" value="5" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-sleep">Sleep</label>
-          <input id="hours-sleep" type="number" inputmode="numeric" min="0" max="168" step="1" value="56">
+          <input id="hours-sleep" type="number" inputmode="numeric" min="0" max="168" step="1" value="56" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-meals">Meals</label>
-          <input id="hours-meals" type="number" inputmode="numeric" min="0" max="168" step="1" value="14">
+          <input id="hours-meals" type="number" inputmode="numeric" min="0" max="168" step="1" value="14" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-hygiene">Hygiene / personal care</label>
-          <input id="hours-hygiene" type="number" inputmode="numeric" min="0" max="168" step="1" value="7">
+          <input id="hours-hygiene" type="number" inputmode="numeric" min="0" max="168" step="1" value="7" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-exercise">Exercise / movement</label>
-          <input id="hours-exercise" type="number" inputmode="numeric" min="0" max="168" step="1" value="3">
+          <input id="hours-exercise" type="number" inputmode="numeric" min="0" max="168" step="1" value="3" />
         </div>
         <div class="tmc-rowctrl">
           <label for="hours-family">Family / caregiving</label>
-          <input id="hours-family" type="number" inputmode="numeric" min="0" max="168" step="1" value="0">
+          <input id="hours-family" type="number" inputmode="numeric" min="0" max="168" step="1" value="0" />
         </div>
 
         <div id="tmc-warning" class="tmc-warning" role="status" aria-live="polite" hidden></div>
       </div>
-
     </section>
   </div>
 </body>
 </html>
-
