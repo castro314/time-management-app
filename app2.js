@@ -1,4 +1,4 @@
-\// Uses Chart.js (MIT License) – chartjs.org
+// Uses Chart.js (MIT License) – chartjs.org
 // See LICENSE.txt for license text.
 
 const WEEK_HOURS = 168;
@@ -199,3 +199,4 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
+
