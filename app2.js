@@ -110,13 +110,33 @@ const chart = new Chart(ctx, {
     plugins: {
       legend: {
         position: "bottom",
-        onClick: () => {},                    // disable legend toggling
+        onClick: () => {}, // disable legend toggling
         onHover: (e) => { e.native.target.style.cursor = "default"; },
         labels: {
-          color: getComputedStyle(document.querySelector('.tmc-app'))
-                  .getPropertyValue('--tmc-text') || '#1f2937'
+            color: getComputedStyle(document.querySelector('.tmc-app'))
+                    .getPropertyValue('--tmc-text') || '#1f2937',
+
+            generateLabels(chart) {
+            const data = chart.data;
+            const dataset = data.datasets[0];
+            const values = dataset.data || [];
+
+            return data.labels.map((label, i) => {
+                const value = values[i] || 0;
+                const pct = ((value / WEEK_HOURS) * 100).toFixed(1);
+
+                return {
+                text: `${label} (${pct}%)`,
+                fillStyle: dataset.backgroundColor[i],
+                strokeStyle: dataset.backgroundColor[i],
+                lineWidth: 0,
+                hidden: false,
+                index: i
+                };
+            });
+            }
         }
-      },
+        },
       tooltip: {
         callbacks: {
           label: (ctx) => {
@@ -204,6 +224,5 @@ document.querySelectorAll('.tmc-rowctrl input[type="number"]').forEach(input=>{
 
 /* ---------- First render ---------- */
 recomputeAndDraw();
-
 
 
